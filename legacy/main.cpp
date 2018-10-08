@@ -45,14 +45,15 @@ int main(int argc, char *argv[])
 		throw std::exception();
 	}
 
-	GLuint vaoId = 0;
-	// Create a new VAO on the GPU and bind it
-	glGenVertexArrays(1, &vaoId);
-	if (!vaoId)
-	{
-		throw std::exception();
-	}
-	glBindVertexArray(vaoId);
+//	GLuint vaoId = 0;
+
+//	// Create a new VAO on the GPU and bind it
+//	glGenVertexArrays(1, &vaoId);
+//	if (!vaoId)
+//	{
+//		throw std::exception();
+//	}
+//	glBindVertexArray(vaoId);
 
 	/*
 	GLuint positionsVboId = 0;
@@ -77,25 +78,29 @@ int main(int argc, char *argv[])
 	// Bind the position VBO, assign it to position 0 on the bound VAO
 	// and flag it to be used
 
-	glBindBuffer(GL_ARRAY_BUFFER, positions->GetId());
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-		3 * sizeof(GLfloat), (void *)0);
-	glEnableVertexAttribArray(0);
+//	glBindBuffer(GL_ARRAY_BUFFER, positions->GetId());
+//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
+//		3 * sizeof(GLfloat), (void *)0);
+//	glEnableVertexAttribArray(0);
 
 	VertexBuffer *colors = new VertexBuffer();
 	colors->add(glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 	colors->add(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 	colors->add(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
+	VertexArray *shape = new VertexArray();
+	shape->SetBuffer("in_Position", positions);
+	shape->SetBuffer("in_Color", colors);
+
 	// Bind the color VBO, assign it to position 1 on the bound VAO
 	// and flag it to be used
-	glBindBuffer(GL_ARRAY_BUFFER, colors->GetId());
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE,
-		4 * sizeof(GLfloat), (void *)0);
-	glEnableVertexAttribArray(1);
+//	glBindBuffer(GL_ARRAY_BUFFER, colors->GetId());
+//	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE,
+//		4 * sizeof(GLfloat), (void *)0);
+//	glEnableVertexAttribArray(1);
 
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+//	glBindBuffer(GL_ARRAY_BUFFER, 0);
+//	glBindVertexArray(0);
 	
 	/*const GLchar *vertexShaderSrc =
 		"attribute vec3 in_Position;             " \
@@ -140,6 +145,7 @@ int main(int argc, char *argv[])
 	glCompileShader(vertexShaderId);
 	GLint success = 0;
 	glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
+
 	if (!success)
 	{
 		throw std::exception();
@@ -227,7 +233,7 @@ int main(int argc, char *argv[])
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			glUseProgram(programId);
-			glBindVertexArray(vaoId);
+			glBindVertexArray(shape->GetId());
 			// Draw 3 vertices (a triangle)
 			glDrawArrays(GL_TRIANGLES, 0, 3);
 			// Reset the state
