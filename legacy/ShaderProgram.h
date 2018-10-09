@@ -13,6 +13,9 @@ private:
 	GLuint id;
 
 public:
+	std::string vertShader;
+	std::string fragShader;
+
 	ShaderProgram();
 	ShaderProgram(std::string vert, std::string frag);
 

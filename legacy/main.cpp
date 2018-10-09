@@ -1,5 +1,6 @@
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
+
 #include <exception>
 
 #include "VertexBuffer.h"
@@ -8,20 +9,6 @@
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
-
-/*
-const GLfloat positions[] = {
-	0.0f, 0.5f, 0.0f,
-	-0.5f, -0.5f, 0.0f,
-	0.5f, -0.5f, 0.0f
-};
-
-const GLfloat colors[] = {
-	1.0f, 0.0f, 0.0f, 1.0f,
-	0.0f, 1.0f, 0.0f, 1.0f,
-	0.0f, 0.0f, 1.0f, 1.0f
-};
-*/
 
 
 int main(int argc, char *argv[])
@@ -92,6 +79,8 @@ int main(int argc, char *argv[])
 	shape->SetBuffer("in_Position", positions);
 	shape->SetBuffer("in_Color", colors);
 
+	ShaderProgram *shaderProgram = new ShaderProgram("../shaders/simple.vert, ../shaders/simple.frag");
+
 	// Bind the color VBO, assign it to position 1 on the bound VAO
 	// and flag it to be used
 //	glBindBuffer(GL_ARRAY_BUFFER, colors->GetId());
@@ -110,7 +99,7 @@ int main(int argc, char *argv[])
 		"  gl_Position = vec4(in_Position, 1.0); " \
 		"}                                       ";*/
 
-	const GLchar *vertexShaderSrc =
+/*	const GLchar *vertexShaderSrc =
 		"attribute vec3 in_Position;			" \
 		"attribute vec4 in_Color;				" \
 		"										" \
@@ -122,7 +111,7 @@ int main(int argc, char *argv[])
 		"  ex_Color = in_Color;		" \
 		"}							" \
 		"							";
-
+*/
 	
 	
 	/*
@@ -138,59 +127,19 @@ int main(int argc, char *argv[])
 	glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 	*/
 
-	// Create a new vertex shader, attach source code, compile it and
-	// check for errors.
-	GLuint vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShaderId, 1, &vertexShaderSrc, NULL);
-	glCompileShader(vertexShaderId);
-	GLint success = 0;
-	glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &success);
-
-	if (!success)
-	{
-		throw std::exception();
-	}
-
-	const GLchar *fragmentShaderSrc =
+	
+/*	const GLchar *fragmentShaderSrc =
 		"varying vec4 ex_Color;" \
 		"void main()" \
 		"{" \
 		"  gl_FragColor = ex_Color;" \
 		"}";
-
-	// Create a new fragment shader, attach source code, compile it and
-	// check for errors.
-	GLuint fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShaderId, 1, &fragmentShaderSrc, NULL);
-	glCompileShader(fragmentShaderId);
-	glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		throw std::exception();
-	}
+*/
 
 
-	// Create new shader program and attach our shader objects
-	GLuint programId = glCreateProgram();
-	glAttachShader(programId, vertexShaderId);
-	glAttachShader(programId, fragmentShaderId);
-	glBindVertexArray(0);
 
 
-	// Ensure the VAO "position" attribute stream gets set as the first position
-	// during the link.
-
-	glBindAttribLocation(programId, 0, "in_Position");
-	glBindAttribLocation(programId, 1, "in_Color");
 	
-	
-	// Perform the link and check for failure
-	glLinkProgram(programId);
-	glGetProgramiv(programId, GL_LINK_STATUS, &success);
-	if (!success)
-	{
-		throw std::exception();
-	}
 
 	//  // Store location of the color uniform and check if successfully found
 	//  GLint colorUniformId = glGetUniformLocation(programId, "in_Color");
@@ -209,10 +158,7 @@ int main(int argc, char *argv[])
 
 	// Detach and destroy the shader objects. These are no longer needed
 	// because we now have a complete shader program.
-	glDetachShader(programId, vertexShaderId);
-	glDeleteShader(vertexShaderId);
-	glDetachShader(programId, fragmentShaderId);
-	glDeleteShader(fragmentShaderId);
+
 	// Instruct OpenGL to use our shader program and our VAO
 
 
@@ -232,13 +178,15 @@ int main(int argc, char *argv[])
 			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			glUseProgram(programId);
-			glBindVertexArray(shape->GetId());
-			// Draw 3 vertices (a triangle)
-			glDrawArrays(GL_TRIANGLES, 0, 3);
-			// Reset the state
-			glBindVertexArray(0);
-			glUseProgram(0);
+			shaderProgram->draw(shape);
+
+//			glUseProgram(programId);
+//			glBindVertexArray(shape->GetId());
+//			// Draw 3 vertices (a triangle)
+//			glDrawArrays(GL_TRIANGLES, 0, 3);
+//			// Reset the state
+//			glBindVertexArray(0);
+//			glUseProgram(0);
 
 			SDL_GL_SwapWindow(window);
 		}
