@@ -23,6 +23,8 @@ public:
 
 	void SetUniform(std::string uniform, glm::vec4 value);
 	void SetUniform(std::string uniform, float value);
+	void SetUniform(std::string uniform, int value);
+	void SetUniform(std::string uniform, glm::mat4 value);
 
 	GLuint getId();
 

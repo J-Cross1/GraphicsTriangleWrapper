@@ -1,6 +1,7 @@
 #include "ShaderProgram.h"
 #include "VertexArray.h"
 
+#include <glm/ext.hpp>
 
 
 ShaderProgram::ShaderProgram()
@@ -113,7 +114,7 @@ ShaderProgram::ShaderProgram(std::string vert, std::string frag)
 		{
 			std::string line;
 			std::getline(file, line);
-			vertShader += line + "\n";
+			fragShader += line + "\n";
 		}
 	}
 	file.close();
@@ -189,6 +190,34 @@ void ShaderProgram::SetUniform(std::string uniform, float value)
 
 	glUseProgram(id);
 	glUniform1f(uniformId, value);
+	glUseProgram(0);
+}
+
+void ShaderProgram::SetUniform(std::string uniform, int value)
+{
+	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
+
+	if (uniformId == -1)
+	{
+		throw std::exception();
+	}
+
+	glUseProgram(id);
+	glUniform1i(uniformId, value);
+	glUseProgram(0);
+}
+
+void ShaderProgram::SetUniform(std::string uniform, glm::mat4 value)
+{
+	GLint uniformId = glGetUniformLocation(id, uniform.c_str());
+
+	if (uniformId == -1)
+	{
+		throw std::exception();
+	}
+
+	glUseProgram(id);
+	glUniformMatrix4fv(uniformId, 1, GL_FALSE, glm::value_ptr(value));
 	glUseProgram(0);
 }
 

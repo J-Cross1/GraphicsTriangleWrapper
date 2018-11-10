@@ -27,6 +27,9 @@
     <ClCompile Include="ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Desktop\GraphicsTriangleWrapper\GraphicsTriangleWrapper\legacy\stb_image.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="VertexArray.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ShaderProgram.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Desktop\GraphicsTriangleWrapper\GraphicsTriangleWrapper\legacy\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
