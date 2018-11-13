@@ -1,2 +1,5 @@
-﻿  main.cpp
+﻿  VertexArray.cpp
+c:\users\j-cro\onedrive\documents\uni year 2\graphics\graphicstrianglewrapper\legacy\vertexarray.cpp(53): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+  Generating Code...
   triangle.vcxproj -> C:\Users\J-Cro\OneDrive\Documents\Uni Year 2\Graphics\GraphicsTriangleWrapper\legacy\Debug\triangle.exe

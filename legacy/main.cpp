@@ -46,15 +46,48 @@ int main(int argc, char *argv[])
 	colors->add(glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 	colors->add(glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
 
+	VertexBuffer *texCoords = new VertexBuffer();
+	texCoords->add(glm::vec2(0.5f, 0.0f));
+	texCoords->add(glm::vec2(0.0f, 1.0f));
+	texCoords->add(glm::vec2(1.0f, 1.0f));
+
 	VertexArray *shape = new VertexArray();
 	shape->SetBuffer("in_Position", positions);
-	shape->SetBuffer("in_Color", colors);
+	shape->SetBuffer("in_Color", texCoords);
+
+
+
 
 	ShaderProgram *shaderProgram = new ShaderProgram("../shaders/simple.vert", "../shaders/simple.frag");
 
+	//Load the image into the memory as an unsigned char
+	int w = 0;
+	int h = 0;
+	int channels = 0;
+	unsigned char *data = stbi_load("Texture1.png", &w, &h, &channels, 4);
+	if (!data)
+	{
+		throw std::exception();
+	}	
 
-
-
+	// Create and bind a texture.
+	GLuint textureId = 0;
+	glGenTextures(1, &textureId);
+	if (!textureId)
+	{
+		throw std::exception();
+	}
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	// Upload the image data to the bound texture unit in the GPU
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+		GL_UNSIGNED_BYTE, data);
+	// Free the loaded data because we now have a copy on the GPU
+	free(data);
+	// Generate Mipmap so the texture can be mapped correctly
+	glGenerateMipmap(GL_TEXTURE_2D);
+	// Unbind the texture because we are done operating on it
+	glBindTexture(GL_TEXTURE_2D, 0);
+	shaderProgram->SetUniform("in_Texture", 1);
 	bool quit = false;
 
 	float angle = 0;
@@ -62,7 +95,7 @@ int main(int argc, char *argv[])
 	while (!quit)
 	{
 		SDL_Event event = { 0 };
-		while (SDL_PollEvent(&event))
+		while (!SDL_QUIT)
 		{
 			if (event.type == SDL_QUIT)
 			{
@@ -72,6 +105,8 @@ int main(int argc, char *argv[])
 			angle++;
 
 
+			glActiveTexture(GL_TEXTURE0 + 1);
+			glBindTexture(GL_TEXTURE_2D, textureId);
 
 
 			// Draw with perspective projection matrix
